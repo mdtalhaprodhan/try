@@ -1,0 +1,47 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>File Downloader in JavaScript| CodingNepal</title>
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./logo.jpg" type="image/x-icon">
+    <title>Created by talha</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>File Downloader</h1>
+        <p>Paste url of image, video, or pdf to download. This tool is made with vanilla javascript.</p>
+      </header>
+      <form action="#">
+        <input type="url" placeholder="Paste file url" required>
+        <button>Download File</button>
+      </form>
+    </div> 
+    <script>
+        const fileInput = document.querySelector("input"),
+downloadBtn = document.querySelector("button");
+downloadBtn.addEventListener("click", e => {
+    e.preventDefault();
+    downloadBtn.innerText = "Downloading file...";
+    fetchFile(fileInput.value);
+});
+function fetchFile(url) {
+    fetch(url).then(res => res.blob()).then(file => {
+        let tempUrl = URL.createObjectURL(file);
+        const aTag = document.createElement("a");
+        aTag.href = tempUrl;
+        aTag.download = url.replace(/^.*[\\\/]/, '');
+        document.body.appendChild(aTag);
+        aTag.click();
+        downloadBtn.innerText = "Download File";
+        URL.revokeObjectURL(tempUrl);
+        aTag.remove();
+    }).catch(() => {
+        alert("Failed to download file!");
+        downloadBtn.innerText = "Download File";
+    });
+}
+    </script>
+  </body>
+</html>
